@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片答题框架</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        button:nth-of-type(1),
+        button:nth-of-type(2){
+            width: 100px;
+            height: 50px;
+            background-color: rgb(0, 247, 119);
+            position: fixed;
+            bottom: 40px;
+            border: none;
+            color: white;
+        }
+        button:nth-of-type(1){
+            left: 70px;
+        }
+        button:nth-of-type(2){
+            right: 70px;
+        }
+        #timer { /* 添加样式以定位时间显示 */
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="questionImage" class="question-image" src="question1.jpg" alt="题目图片"> <!-- 替换为实际图片路径 -->
+        <div id="answerText" class="hidden">这是第一题的答案</div> <!-- 替换为实际答案 -->
+        <div class="controls">
+            <button id="showAnswerBtn">显示答案</button>
+            <button id="nextQuestionBtn">下一题</button>
+        </div>
+    </div>
+ 
+    <script>
+        // 题目和答案的数据，可以根据需要添加更多题目
+        const questions = [
+            {
+                imageSrc: './11.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './12.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './13.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './14.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './21.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './22.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './23.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './24.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './111.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './112.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './113.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './114.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './115.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './116.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './117.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './118.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './119.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './120.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './121.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './122.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './123.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './124.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './125.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './126.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+            {
+                imageSrc: './127.jpg', // 替换为实际图片路径
+                answer: '答案如图'
+            },
+
+            // ... 添加更多题目
+        ];
+ 
+        let currentIndex = 0;
+ 
+        // 获取HTML元素
+        const questionImage = document.getElementById('questionImage');
+        const answerText = document.getElementById('answerText');
+        const showAnswerBtn = document.getElementById('showAnswerBtn');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+ 
+        // 显示当前题目和答案的功能
+        function showCurrentQuestion() {
+            const currentQuestion = questions[currentIndex];
+            questionImage.src = currentQuestion.imageSrc;
+            answerText.textContent = currentQuestion.answer;
+            // 初始隐藏答案
+            answerText.classList.add('hidden');
+        }
+ 
+        // 显示答案的功能
+        showAnswerBtn.addEventListener('click', () => {
+            answerText.classList.toggle('hidden');
+        });
+ 
+        // 显示下一题的功能
+        nextQuestionBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % questions.length;
+            showCurrentQuestion();
+            // 隐藏答案
+            answerText.classList.add('hidden');
+        });
+ 
+        // 初始化显示第一题
+        showCurrentQuestion();
+    </script>
+</body>
+</html>
